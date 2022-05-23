@@ -1,50 +1,40 @@
 <script setup lang='ts'>
-const client = useSupabaseClient()
-const user = useSupabaseUser()
+let currentView = ref('Login')
 
-const form = ref({
-    email: '',
-    password: ''
-})
-
-function singUp() {
-    client.auth.signUp({
-        email: form.value.email,
-        password: form.value.password,
-    }) 
+function changeView(view: string) {
+    currentView.value = view
 }
+
 </script>
 
-<template>
-
-    <div class="index" flex justify-center items-center>
-        <div class="singup-card">
-            <div class="singup-card-header">
-                <h1>Sign Up</h1>
-            </div>
-            <div class="singup-card-body">
-                <div class="singup-card-body-input">
-                    <input type="text" placeholder="Email" v-model="form.email">
-                </div>
-                <div class="singup-card-body-input">
-                    <input type="password" placeholder="Password" v-model="form.password">
-                </div>
-                <div class="singup-card-body-input">
-                </div>
-                <div class="singup-card-body-button">
-                    <button @click="singUp">Sign Up</button>
-                </div>
-            </div>
-        </div>
-        <div class="go-to-signin">
-            <a href="/signin">Already have an account? Sign In</a>
-        </div>
-        {{user}}
-    </div>
-
-</template>
-
-
-
 <style scoped>
+
+span {
+    cursor: pointer;
+    font-weight: bold;
+}
+
+span:hover {
+    color: #00DC82;
+}
+
+p {
+    color: #fff;
+    font-size: 14px;
+}
+
+
+
 </style>
+
+<template>
+    <div flex justify-center items-center w-full h-100vh>
+        <div flex flex-col items-center>
+            <component :is="currentView" />
+            <div>
+                <p v-if="currentView === 'SignUp' ">Already have an account? <span @click="changeView('Login')">Sign in</span></p>
+                <p v-else>Don't have an account? <span @click="changeView('SignUp')">Sign up</span></p>
+            </div>
+        </div>
+    </div>
+</template>
